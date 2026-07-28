@@ -69,7 +69,7 @@ class Novelty:
             asset.id: asset.estimated_savings_per_reuse() for asset in assets
         }
 
-        decision = self.policy_engine.decide(all_results, asset_savings)
+        decision = self.policy_engine.decide(all_results, asset_savings, assets)
 
         # Track reuse in database
         if self._store and decision.matched_asset and decision.action in ("reuse", "cache"):

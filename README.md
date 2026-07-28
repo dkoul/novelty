@@ -12,8 +12,9 @@ You have two smart friends who answer questions for cookies:
 |--------|---------|-----------|
 | **Deepak** (frontier) | 1 full cookie | 100% smart |
 | **Anuj** (small) | ½ cookie | 90% smart |
+| **Notebook** (hint) | 0 cookies | Just a nudge |
 
-Your whole class keeps asking the same questions. Every time, you give away cookies. But what if you wrote down the answers?
+Your whole class keeps asking the same questions. Every time, you give away cookies. But what if you wrote down the answers — or at least some hints?
 
 ---
 
@@ -49,17 +50,26 @@ Novelty: *checks notebook*
 ```
 
 ```
-Bob: "How do I make my toy waterproof?"
+Bob: "My toy is acting weird"
 
 Novelty: *checks notebook*
-         "Similar to something, but not exact..."
-         "Needs SOME thinking, but not the HARDEST"
+         "Similar to something... but not sure which"
+         "Here's a hint — figure it out yourself!"
+         → Returns: "Check batteries, volume, or winding"
+         → NO COOKIES (and Bob's brain stays sharp!)
+```
+
+```
+Carol: "How do I make my toy waterproof?"
+
+Novelty: *checks notebook*
+         "Related, but needs SOME thinking"
          → Asks Anuj (½ cookie)
          → Good enough!
 ```
 
 ```
-Carol: "How do I build a mass produced robot?"
+Dave: "How do I build a mass produced robot?"
 
 Novelty: *checks notebook*
          "Never seen ANYTHING like this!"
@@ -73,16 +83,17 @@ Novelty: *checks notebook*
 
 | Question | Who Answered | Cookies |
 |----------|--------------|---------|
-| Toy stopped working | Notebook | 0 |
+| Toy stopped working | Notebook (full) | 0 |
+| Toy acting weird | Notebook (hint) | 0 |
 | Toy waterproof | Anuj | ½ |
 | Robot army | Deepak | 1 |
-| Battery died | Notebook | 0 |
+| Battery died | Notebook (full) | 0 |
 | Toy floats? | Anuj | ½ |
 | **Total** | | **2 cookies** |
 
-**Old way (always ask Deepak): 5 cookies**
+**Old way (always ask Deepak): 6 cookies**
 
-**Saved: 3 cookies (60%)**
+**Saved: 4 cookies (67%)**
 
 ---
 
@@ -102,10 +113,14 @@ Question
     ↓
 Novelty Score (0.0 = seen before, 1.0 = completely new)
     ↓
-├── 0.0 - 0.45  →  REUSE      →  Use notebook (no cookies)
-├── 0.45 - 0.70 →  ANUJ       →  Small model (½ cookie)
-└── 0.70 - 1.0  →  DEEPAK     →  Frontier model (1 cookie)
+├── 0.0 - 0.40  →  REUSE   →  Full answer from notebook (0 cookies)
+├── 0.40 - 0.55 →  HINT    →  Just a nudge — you figure it out (0 cookies)
+├── 0.55 - 0.70 →  ANUJ    →  Small model (½ cookie)
+└── 0.70 - 1.0  →  DEEPAK  →  Frontier model (1 cookie)
 ```
+
+**Why HINT?** Keeps your brain sharp. Instead of giving the full answer,
+Novelty says "Have you checked X?" — you still have to think.
 
 ---
 

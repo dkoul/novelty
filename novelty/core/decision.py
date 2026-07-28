@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 
-Action = Literal["reuse", "cache", "small_model", "frontier_model"]
+Action = Literal["reuse", "hint", "small_model", "frontier_model"]
 
 
 @dataclass
@@ -18,6 +18,7 @@ class NoveltyDecision:
     explanation: list[str] = field(default_factory=list)
     estimated_savings: dict | None = None
     recommended_model: str | None = None
+    hint: str | None = None
 
     def __post_init__(self):
         if not 0.0 <= self.novelty_score <= 1.0:
@@ -34,4 +35,5 @@ class NoveltyDecision:
             "explanation": self.explanation,
             "estimated_savings": self.estimated_savings,
             "recommended_model": self.recommended_model,
+            "hint": self.hint,
         }

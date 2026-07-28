@@ -23,8 +23,8 @@ def get_novelty_bar(score: float, width: int = 20) -> str:
 def get_action_style(action: str) -> tuple[str, str]:
     styles = {
         "reuse": ("bold green", "REUSE"),
-        "cache": ("bold yellow", "CACHE"),
-        "small_model": ("bold blue", "SMALL MODEL"),
+        "hint": ("bold cyan", "HINT"),
+        "small_model": ("bold yellow", "SMALL MODEL"),
         "frontier_model": ("bold red", "FRONTIER MODEL"),
     }
     return styles.get(action, ("white", action.upper()))
@@ -76,6 +76,10 @@ def evaluate(
         tokens = decision.estimated_savings.get("tokens", 0)
         cost = decision.estimated_savings.get("cost_usd", 0)
         body_lines.append(f"[bold]Savings:[/] ~{tokens:,} tokens (${cost:.2f})")
+
+    if decision.hint:
+        body_lines.append("")
+        body_lines.append(f"[bold yellow]Hint:[/] {decision.hint}")
 
     body = "\n".join(body_lines)
 
@@ -210,10 +214,12 @@ def demo():
             f"(novelty: {decision.novelty_score:.2f}, {elapsed:.0f}ms)"
         )
 
-        if decision.action in ("reuse", "cache"):
+        if decision.action in ("reuse", "hint"):
             reuse_count += 1
             if decision.estimated_savings:
                 total_savings += decision.estimated_savings.get("cost_usd", 0)
+        elif decision.action == "small_model":
+            reuse_count += 0.5  # Half cookie for Anuj
         else:
             frontier_count += 1
 

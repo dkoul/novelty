@@ -1,6 +1,6 @@
 """Policy engine for novelty decisions."""
 
-from novelty.core import NoveltyDecision, SimilarityResult
+from novelty.core import NoveltyDecision, SimilarityResult, Asset
 
 
 DEFAULT_CONFIG = {
@@ -10,9 +10,10 @@ DEFAULT_CONFIG = {
         "intent": 0.20,
     },
     "thresholds": {
-        "reuse": 0.45,
-        "cache": 0.55,
-        "small_model": 0.70,
+        "reuse": 0.40,        # High confidence → full answer
+        "hint": 0.55,         # Medium confidence → just a nudge
+        "small_model": 0.70,  # Needs some thinking → Anuj
+        # Above 0.70 → Deepak (frontier)
     },
     "models": {
         "small_model": "gpt-4o-mini",      # 50% cost, ~90% quality
@@ -34,6 +35,7 @@ class PolicyEngine:
         self,
         results: list[SimilarityResult],
         asset_savings: dict[str, dict] | None = None,
+        assets: list[Asset] | None = None,
     ) -> NoveltyDecision:
         if not results:
             return NoveltyDecision(
@@ -74,8 +76,8 @@ class PolicyEngine:
 
         if novelty_score <= self.thresholds["reuse"]:
             action = "reuse"
-        elif novelty_score <= self.thresholds["cache"]:
-            action = "cache"
+        elif novelty_score <= self.thresholds["hint"]:
+            action = "hint"
         elif novelty_score <= self.thresholds["small_model"]:
             action = "small_model"
         else:
@@ -88,22 +90,43 @@ class PolicyEngine:
         confidence = self._calculate_confidence(best_breakdown, novelty_score)
 
         estimated_savings = None
-        if action in ("reuse", "cache") and best_asset and asset_savings:
+        if action in ("reuse", "hint") and best_asset and asset_savings:
             estimated_savings = asset_savings.get(best_asset)
 
         recommended_model = None
         if action in ("small_model", "frontier_model"):
             recommended_model = self.models.get(action)
 
+        hint = None
+        if action == "hint" and best_asset and assets:
+            hint = self._build_hint(best_asset, assets)
+
         return NoveltyDecision(
             novelty_score=round(novelty_score, 2),
             confidence=round(confidence, 2),
             action=action,
-            matched_asset=best_asset if action in ("reuse", "cache") else None,
+            matched_asset=best_asset if action in ("reuse", "hint") else None,
             explanation=explanation,
             estimated_savings=estimated_savings,
             recommended_model=recommended_model,
+            hint=hint,
         )
+
+    def _build_hint(self, asset_id: str, assets: list[Asset]) -> str:
+        """Build a hint from the matched asset without giving the full answer."""
+        asset = next((a for a in assets if a.id == asset_id), None)
+        if not asset:
+            return None
+
+        keywords = ", ".join(str(k) for k in asset.keywords[:5])
+        tags = ", ".join(str(t) for t in asset.tags[:3])
+
+        hint_parts = [
+            f"This looks related to: {tags}.",
+            f"Consider checking: {keywords}.",
+            f"Related asset: {asset.name}",
+        ]
+        return " ".join(hint_parts)
 
     def _build_explanation(
         self,
