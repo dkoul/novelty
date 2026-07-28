@@ -1,0 +1,53 @@
+id: api-rate-limit
+name: API Rate Limiting Debugging
+version: 1
+tags:
+  - api
+  - rate-limit
+  - throttling
+  - "429"
+  - rest
+keywords:
+  - rate
+  - limit
+  - "429"
+  - throttle
+  - too many requests
+  - quota
+  - api
+  - retry
+  - backoff
+intent: debug
+content: |
+  API Rate Limiting Debugging Guide
+
+  1. Identify Rate Limit
+     - Check response headers
+       - X-RateLimit-Limit
+       - X-RateLimit-Remaining
+       - X-RateLimit-Reset
+     - Look for 429 status code
+
+  2. Implement Retry Logic
+     - Exponential backoff: 1s, 2s, 4s, 8s
+     - Respect Retry-After header
+     - Max retries: 3-5 attempts
+
+  3. Optimize API Usage
+     - Batch requests where possible
+     - Cache responses
+     - Use webhooks instead of polling
+     - Implement request queuing
+
+  4. Common Patterns
+     - Token bucket algorithm
+     - Sliding window rate limiting
+     - Per-user vs per-IP limits
+
+  5. Best Practices
+     - Monitor rate limit headers
+     - Alert before hitting limits
+     - Request quota increases
+     - Use API client libraries
+cost_to_create: 0.03
+reuse_count: 0

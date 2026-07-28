@@ -1,0 +1,52 @@
+id: oauth-refresh
+name: OAuth Token Refresh Debugging
+version: 1
+tags:
+  - oauth
+  - authentication
+  - token
+  - refresh
+  - jwt
+keywords:
+  - oauth
+  - token
+  - refresh
+  - expired
+  - invalid
+  - authentication
+  - "401"
+  - unauthorized
+  - bearer
+  - jwt
+intent: debug
+content: |
+  OAuth Token Refresh Debugging Guide
+
+  1. Check Token Expiry
+     - Decode JWT to verify exp claim
+     - Compare with current timestamp
+     - Account for clock skew (5min buffer)
+
+  2. Verify Refresh Token
+     - Ensure refresh_token exists
+     - Check refresh token hasn't expired
+     - Verify scope includes offline_access
+
+  3. Token Refresh Flow
+     - POST to /oauth/token
+     - Include grant_type=refresh_token
+     - Send client_id and client_secret
+
+  4. Common Issues
+     - Refresh token rotated but old one used
+     - Token revoked by user/admin
+     - Client credentials changed
+     - CORS blocking token endpoint
+
+  5. Best Practices
+     - Refresh 5min before expiry
+     - Handle refresh failures gracefully
+     - Store tokens securely
+     - Implement retry with backoff
+cost_to_create: 0.04
+reuse_count: 0

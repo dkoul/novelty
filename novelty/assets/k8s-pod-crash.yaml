@@ -1,0 +1,57 @@
+id: k8s-pod-crash
+name: Kubernetes Pod Crash Debugging
+version: 1
+tags:
+  - kubernetes
+  - k8s
+  - pod
+  - crash
+  - container
+  - deployment
+keywords:
+  - pod
+  - crash
+  - crashloopbackoff
+  - oom
+  - killed
+  - restart
+  - container
+  - kubernetes
+  - k8s
+  - memory
+  - oomkilled
+intent: debug
+content: |
+  Kubernetes Pod Crash Debugging Guide
+
+  1. Get Pod Status
+     kubectl get pods -n <namespace>
+     kubectl describe pod <pod-name>
+
+  2. Check Logs
+     kubectl logs <pod-name> --previous
+     kubectl logs <pod-name> -c <container>
+
+  3. Common Crash Reasons
+     - OOMKilled: Memory limit exceeded
+     - CrashLoopBackOff: App crashes on start
+     - ImagePullBackOff: Image not found
+     - Pending: Resource constraints
+
+  4. OOM Debugging
+     - Check limits vs actual usage
+     - Look for memory leaks
+     - Increase memory.limits
+     - Profile application memory
+
+  5. Startup Failures
+     - Check liveness/readiness probes
+     - Verify env vars and secrets
+     - Check volume mounts
+     - Review init containers
+
+  6. Quick Fixes
+     kubectl rollout restart deployment <name>
+     kubectl delete pod <pod-name>
+cost_to_create: 0.05
+reuse_count: 0

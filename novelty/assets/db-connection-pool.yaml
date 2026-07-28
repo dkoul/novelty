@@ -1,0 +1,61 @@
+id: db-connection-pool
+name: Database Connection Pool Debugging
+version: 1
+tags:
+  - database
+  - connection
+  - pool
+  - postgres
+  - mysql
+  - timeout
+keywords:
+  - connection
+  - pool
+  - exhausted
+  - timeout
+  - database
+  - postgres
+  - mysql
+  - max connections
+  - idle
+  - leak
+intent: debug
+content: |
+  Database Connection Pool Debugging Guide
+
+  1. Check Pool Status
+     - Monitor active connections
+     - Check pending requests
+     - Review idle connection count
+     - Verify max pool size
+
+  2. Common Symptoms
+     - Connection timeout errors
+     - "Pool exhausted" messages
+     - Slow query starts
+     - Application hangs
+
+  3. Pool Configuration
+     - min_connections: 5-10
+     - max_connections: 20-50
+     - idle_timeout: 10min
+     - connection_timeout: 5s
+
+  4. Connection Leaks
+     - Ensure connections are released
+     - Use context managers/try-finally
+     - Check ORM session handling
+     - Monitor connection age
+
+  5. Database Side
+     - Check max_connections setting
+     - Review pg_stat_activity
+     - Kill long-running queries
+     - Verify connection limits
+
+  6. Quick Fixes
+     - Restart connection pool
+     - Reduce max_connections
+     - Add connection health checks
+cost_to_create: 0.04
+reuse_count: 0

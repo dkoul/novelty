@@ -1,0 +1,49 @@
+id: playwright-timeout
+name: Playwright Timeout Debugging
+version: 1
+tags:
+  - playwright
+  - timeout
+  - e2e
+  - testing
+  - automation
+keywords:
+  - timeout
+  - locator
+  - click
+  - wait
+  - selector
+  - element
+  - visible
+  - attached
+  - page
+  - browser
+intent: debug
+content: |
+  Playwright Timeout Debugging Guide
+
+  1. Verify Selector
+     - Use page.locator() with specific selectors
+     - Check element exists in DevTools
+     - Use data-testid for stability
+
+  2. Increase Timeout
+     - Default is 30s, increase for slow pages
+     - Use timeout option: click({ timeout: 60000 })
+
+  3. Wait Strategies
+     - waitForSelector before interaction
+     - waitForLoadState('networkidle')
+     - waitForFunction for dynamic content
+
+  4. Debug Mode
+     - Run with PWDEBUG=1
+     - Use page.pause() for breakpoints
+     - Check trace viewer
+
+  5. Common Fixes
+     - Element hidden: check visibility
+     - Element detached: wait for stability
+     - Wrong iframe: use frame locators
+cost_to_create: 0.05
+reuse_count: 0
